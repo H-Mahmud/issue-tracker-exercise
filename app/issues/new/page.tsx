@@ -1,19 +1,13 @@
-import {
-  Box,
-  Button,
-  Section,
-  TextArea,
-  TextFieldInput,
-} from '@radix-ui/themes';
+import { Box, Button, TextArea, TextFieldInput } from '@radix-ui/themes';
 
 export default function NewIssuePage() {
   return (
-    <Section>
+    <section>
       <Box className='max-w-xl space-y-4'>
         <TextFieldInput placeholder='Title' />
         <TextArea placeholder='Description' />
         <Button>Submit New Issue</Button>
       </Box>
-    </Section>
+    </section>
   );
 }
