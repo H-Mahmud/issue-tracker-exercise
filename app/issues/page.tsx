@@ -1,3 +1,9 @@
+import { Button } from '@radix-ui/themes';
+
 export default function IssuePage() {
-  return <h1 className='text-3xl py-5 text-center'>Issue</h1>;
+  return (
+    <section>
+      <Button>New Issue</Button>
+    </section>
+  );
 }
