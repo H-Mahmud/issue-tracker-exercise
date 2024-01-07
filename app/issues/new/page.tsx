@@ -11,7 +11,7 @@ import { MdErrorOutline } from 'react-icons/md';
 import { createIssueSchema } from '@/app/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Spinner from '@/app/components/Spinner';
+import { Spinner } from '@/app/components';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 export default function NewIssuePage() {
