@@ -1,12 +1,17 @@
 import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
-import IssueForm from '../../_components/IssueForm';
 
+import dynamic from 'next/dynamic';
 type Props = {
   params: {
     id: string;
   };
 };
+
+const IssueForm = dynamic(() => import('../../_components/IssueForm'), {
+  ssr: false,
+});
+
 export default async function IssueEditPage({ params: { id } }: Props) {
   const issueId = parseInt(id);
 
