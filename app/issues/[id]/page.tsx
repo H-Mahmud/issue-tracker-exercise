@@ -1,42 +1,27 @@
-import { IssueStatusBadge } from '@/app/components';
 import prisma from '@/prisma/client';
-import { Box, Button, Card, Flex, Grid, Heading, Text } from '@radix-ui/themes';
-import Link from 'next/link';
+import { Box, Flex, Grid } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
-import { BsPencilSquare } from 'react-icons/bs';
+import IssueDetails from './IssueDetails';
+import IssueEditButton from './IssueEditButton';
 
 type Props = {
   params: { id: string };
 };
 
-export default async function IssueDetailsPage({ params }: Props) {
+export default async function IssueDetailsPage({ params: { id } }: Props) {
+  const issueId = parseInt(id);
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: issueId },
   });
   if (!issue) notFound();
 
   return (
     <Grid columns={{ initial: '1', md: '2' }} gap='5'>
       <Flex direction='column' gap='3'>
-        <Heading>{issue.title}</Heading>
-        <Flex gap='3'>
-          <IssueStatusBadge status={issue.status} />
-          <Text>{issue.createdAT.toDateString()}</Text>
-        </Flex>
-        <Card>
-          <ReactMarkdown className='prose'>{issue.description}</ReactMarkdown>
-          <Text as='p' color='gray' className='pt-2'>
-            <b>Last Update: </b>
-            {issue.updatedAt.toDateString()}
-          </Text>
-        </Card>
+        <IssueDetails issue={issue} />
       </Flex>
       <Box>
-        <Button>
-          <BsPencilSquare />
-          <Link href={`/issues/${params.id}/edit`}>Edit Issue</Link>
-        </Button>
+        <IssueEditButton issueId={issueId} />
       </Box>
     </Grid>
   );
