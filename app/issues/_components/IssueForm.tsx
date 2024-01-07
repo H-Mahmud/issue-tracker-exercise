@@ -35,8 +35,13 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const onSubmit = handleSubmit(async (data) => {
     setIsSubmitting(true);
     try {
-      await axios.post('/api/issues', { ...data });
-      router.push('/issues');
+      if (issue) {
+        await axios.patch('/api/issues/' + issue.id, { ...data });
+        router.push('/issues/' + issue.id);
+      } else {
+        await axios.post('/api/issues', { ...data });
+        router.push('/issues');
+      }
       setIsSubmitting(false);
     } catch (error) {
       setError('An unexpected error encountered.');
@@ -56,7 +61,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       )}
       <form onSubmit={onSubmit} className=' space-y-4'>
         <TextFieldInput
-          value={issue?.title}
+          defaultValue={issue?.title}
           placeholder='Title'
           {...register('title')}
         />
@@ -76,7 +81,8 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         </Text>
 
         <Button disabled={isSubmitting}>
-          Submit New Issue {isSubmitting && <Spinner />}
+          {issue ? 'Update Issue' : 'Submit New Issue'}{' '}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </section>
