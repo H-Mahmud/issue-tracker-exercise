@@ -18,3 +18,5 @@ export default async function IssuePage() {
     </section>
   );
 }
+
+export const dynamic = 'force-dynamic';
