@@ -46,11 +46,9 @@ export default function NewIssuePage() {
         className=' space-y-4'
       >
         <TextFieldInput placeholder='Title' {...register('title')} />
-        {errors.title && (
-          <Text color='red' as='p'>
-            {errors.title.message}
-          </Text>
-        )}
+        <Text color='red' as='p'>
+          {errors.title?.message}
+        </Text>
         <Controller
           name='description'
           control={control}
@@ -58,11 +56,10 @@ export default function NewIssuePage() {
             <SimpleMDE placeholder='description' {...field} />
           )}
         />
-        {errors.description && (
-          <Text color='red' as='p'>
-            {errors.description.message}
-          </Text>
-        )}
+        <Text color='red' as='p'>
+          {errors.description?.message}
+        </Text>
+
         <Button>Submit New Issue</Button>
       </form>
     </section>
