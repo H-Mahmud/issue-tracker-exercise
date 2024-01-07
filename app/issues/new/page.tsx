@@ -11,6 +11,7 @@ import { MdErrorOutline } from 'react-icons/md';
 import { createIssueSchema } from '@/app/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 export default function NewIssuePage() {
@@ -24,6 +25,7 @@ export default function NewIssuePage() {
   });
   const router = useRouter();
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
     <section className='max-w-xl'>
       {error && (
@@ -36,11 +38,14 @@ export default function NewIssuePage() {
       )}
       <form
         onSubmit={handleSubmit(async (data) => {
+          setIsSubmitting(true);
           try {
             await axios.post('/api/issues', { ...data });
             router.push('/issues');
+            setIsSubmitting(false);
           } catch (error) {
             setError('An unexpected error encountered.');
+            setIsSubmitting(false);
           }
         })}
         className=' space-y-4'
@@ -60,7 +65,9 @@ export default function NewIssuePage() {
           {errors.description?.message}
         </Text>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </section>
   );
