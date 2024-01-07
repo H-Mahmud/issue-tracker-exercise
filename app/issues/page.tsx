@@ -1,6 +1,6 @@
 import { Button, Table } from '@radix-ui/themes';
 import Link from 'next/link';
-import prisma from '@/db/prisma';
+import prisma from '@/prisma/client';
 
 export default async function IssuePage() {
   const issues = await prisma.issue.findMany();
