@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { IconContext } from 'react-icons';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
+import { Box } from '@radix-ui/themes';
+import { useSession } from 'next-auth/react';
+import { signOut, signIn } from 'next-auth/react';
 
 const NavBar = () => {
   const links = [
@@ -12,6 +15,7 @@ const NavBar = () => {
   ];
 
   const currentPath = usePathname();
+  const { status } = useSession();
 
   return (
     <nav className='h-20 px-6 border-b flex items-center justify-between'>
@@ -28,20 +32,26 @@ const NavBar = () => {
       <ul className='flex items-center space-x-6'>
         {links.map((link, index) => {
           return (
-            <Link
-              key={index}
-              className={classNames({
-                'text-zinc-95000': currentPath === link.href,
-                'text-zinc-600 hover:text-zinc-700': currentPath !== link.href,
-                'transition-colors': true,
-              })}
-              href={link.href}
-            >
-              {link.label}
-            </Link>
+            <li key={index}>
+              <Link
+                className={classNames({
+                  'text-zinc-95000': currentPath === link.href,
+                  'text-zinc-600 hover:text-zinc-700':
+                    currentPath !== link.href,
+                  'transition-colors': true,
+                })}
+                href={link.href}
+              >
+                {link.label}
+              </Link>
+            </li>
           );
         })}
       </ul>
+      <Box>
+        {status === 'authenticated' && <Link href=''>Logout</Link>}
+        {status === 'unauthenticated' && <Link href='/api/auth/signin'></Link>}
+      </Box>
     </nav>
   );
 };
