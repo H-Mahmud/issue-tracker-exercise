@@ -1,11 +1,12 @@
 import authOptions from '@/app/api/auth/[...nextauth]/authOptions';
 import prisma from '@/prisma/client';
-import { Flex, Grid } from '@radix-ui/themes';
+import { Box, Flex, Grid } from '@radix-ui/themes';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import IssueDeleteButton from './IssueDeleteButton';
 import IssueDetails from './IssueDetails';
 import IssueEditButton from './IssueEditButton';
+import AssigneeSelect from './AssigneeSelect';
 
 type Props = {
   params: { id: string };
@@ -26,7 +27,8 @@ export default async function IssueDetailsPage({ params: { id } }: Props) {
         <IssueDetails issue={issue} />
       </Flex>
       {session && (
-        <Flex gap='2'>
+        <Flex gap='2' direction='column'>
+          <AssigneeSelect />
           <IssueEditButton issueId={issueId} />
           <IssueDeleteButton issueId={issueId} />
         </Flex>
