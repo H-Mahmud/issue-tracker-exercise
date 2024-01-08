@@ -1,7 +1,7 @@
 'use client';
-import { Box, Container, Flex } from '@radix-ui/themes';
+import { Avatar, Box, Container, DropdownMenu, Flex } from '@radix-ui/themes';
 import classNames from 'classnames';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IconContext } from 'react-icons';
@@ -14,12 +14,12 @@ const NavBar = () => {
   ];
 
   const currentPath = usePathname();
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   return (
     <nav className='border-b '>
       <Container>
-        <Flex justify='between' align='center' className='h-20'>
+        <Flex justify='between' align='center' className='h-20 px-5'>
           <Flex>
             <Link href='/' className='fill-gray-700 mr-3'>
               <IconContext.Provider
@@ -52,7 +52,26 @@ const NavBar = () => {
             </ul>
           </Flex>
           <Box>
-            {status === 'authenticated' && <Link href=''>Logout</Link>}
+            {status === 'authenticated' && (
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Avatar
+                    src={data.user?.image!}
+                    fallback='?'
+                    size='3'
+                    radius='full'
+                    className='cursor-pointer'
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Label>{data.user?.email}</DropdownMenu.Label>
+                  <DropdownMenu.Separator />
+                  <DropdownMenu.Item color='red' onClick={() => signOut()}>
+                    Logout
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            )}
             {status === 'unauthenticated' && (
               <Link href='/api/auth/signin'>Login</Link>
             )}
