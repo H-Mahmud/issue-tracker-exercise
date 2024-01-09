@@ -1,52 +1,19 @@
 import { Issue, Status } from '@prisma/client';
-import { Table } from '@radix-ui/themes';
-import { IssueStatusBadge, Link } from '../components';
-import prisma from '@/prisma/client';
-import { Props } from './page';
-import NextLink from 'next/link';
-import { MdKeyboardArrowDown } from 'react-icons/md';
-import { IconContext } from 'react-icons';
 import { CaretDownIcon } from '@radix-ui/react-icons';
-import Pagination from '../components/Pagination';
+import { Table } from '@radix-ui/themes';
+import NextLink from 'next/link';
+import { IssueStatusBadge, Link } from '../components';
 
-const IssuesTable = async ({ searchParams }: Props) => {
-  const statuses = Object.values(Status);
-  const status = statuses.includes(searchParams.status)
-    ? searchParams.status
-    : undefined;
-
-  const where = {
-    status,
-  };
-  type Columns = {
-    label: string;
-    value: keyof Issue;
-    className?: string;
-  };
-  const columns: Columns[] = [
-    { label: 'Title', value: 'title' },
-    { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
-    { label: 'Created', value: 'createdAT', className: 'hidden md:table-cell' },
-  ];
-
-  const orderBy = columns
-    .map((column) => column.value)
-    .includes(searchParams.orderBy)
-    ? { [searchParams.orderBy]: 'asc' }
-    : undefined;
-
-  const page = parseInt(searchParams.page) || 1;
-  const pageSize = 2;
-
-  const issues = await prisma.issue.findMany({
-    where,
-    orderBy,
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-  });
-
-  const issueCount = await prisma.issue.count({ where });
-
+export type issueQuery = {
+  status: Status;
+  orderBy: keyof Issue;
+  page: string;
+};
+type Props = {
+  searchParams: issueQuery;
+  issues: Issue[];
+};
+const IssuesTable = async ({ searchParams, issues }: Props) => {
   return (
     <>
       <Table.Root variant='surface'>
@@ -92,13 +59,16 @@ const IssuesTable = async ({ searchParams }: Props) => {
           })}
         </Table.Body>
       </Table.Root>
-      <Pagination
-        pageSize={pageSize}
-        currentPage={page}
-        itemCount={issueCount}
-      />
     </>
   );
 };
+
+type Columns = { label: string; value: keyof Issue; className?: string };
+const columns: Columns[] = [
+  { label: 'Title', value: 'title' },
+  { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
+  { label: 'Created', value: 'createdAT', className: 'hidden md:table-cell' },
+];
+export const columnNames = columns.map((column) => column.value);
 
 export default IssuesTable;
