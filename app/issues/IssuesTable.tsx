@@ -13,11 +13,6 @@ const IssuesTable = async ({ searchParams }: Props) => {
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
     : undefined;
-  const issues = await prisma.issue.findMany({
-    where: {
-      status,
-    },
-  });
 
   type Columns = {
     label: string;
@@ -29,6 +24,19 @@ const IssuesTable = async ({ searchParams }: Props) => {
     { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
     { label: 'Created', value: 'createdAT', className: 'hidden md:table-cell' },
   ];
+
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: 'asc' }
+    : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: {
+      status,
+    },
+    orderBy,
+  });
 
   return (
     <Table.Root variant='surface'>
