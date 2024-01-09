@@ -1,30 +1,18 @@
+import { Issue, Status } from '@prisma/client';
 import { Button, Flex } from '@radix-ui/themes';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import authOptions from '../api/auth/[...nextauth]/authOptions';
+import IssueStatusFilter from './IssueStatusFilter';
 import IssueTableSkeleton from './IssueTableSkeleton';
 import IssuesTable from './IssuesTable';
-import IssueStatusFilter from './IssueStatusFilter';
-import { Status } from '@prisma/client';
-import prisma from '@/prisma/client';
 
-type Props = {
-  searchParams: { status: Status };
+export type Props = {
+  searchParams: { status: Status; orderBy: keyof Issue };
 };
-export default async function IssuePage({ searchParams }: Props) {
-  const statuses = Object.values(Status);
 
-  const status = statuses.includes(searchParams.status)
-    ? searchParams.status
-    : undefined;
-
-  const issues = await prisma.issue.findMany({
-    where: {
-      status,
-    },
-  });
-
+export default async function IssuePage(props: Props) {
   const session = await getServerSession(authOptions);
 
   return (
@@ -40,7 +28,7 @@ export default async function IssuePage({ searchParams }: Props) {
         <IssueStatusFilter />
       </Flex>
       <Suspense fallback={<IssueTableSkeleton />}>
-        <IssuesTable issues={issues} />
+        <IssuesTable {...props} />
       </Suspense>
     </section>
   );
