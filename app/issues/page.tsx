@@ -1,10 +1,7 @@
 import { Issue, Status } from '@prisma/client';
-import { Button, Flex } from '@radix-ui/themes';
-import { getServerSession } from 'next-auth';
-import Link from 'next/link';
+import { Flex } from '@radix-ui/themes';
 import { Suspense } from 'react';
-import authOptions from '../api/auth/[...nextauth]/authOptions';
-import IssueStatusFilter from './IssueStatusFilter';
+import IssueActions from './IssueActions';
 import IssueTableSkeleton from './IssueTableSkeleton';
 import IssuesTable from './IssuesTable';
 
@@ -13,24 +10,13 @@ export type Props = {
 };
 
 export default async function IssuePage(props: Props) {
-  const session = await getServerSession(authOptions);
-
   return (
-    <section>
-      <Flex justify='between' mb='3'>
-        {session && (
-          <div className='mb-4'>
-            <Button>
-              <Link href='/issues/new'>New Issue</Link>
-            </Button>
-          </div>
-        )}
-        <IssueStatusFilter />
-      </Flex>
+    <Flex gap='3' direction='column'>
+      <IssueActions />
       <Suspense fallback={<IssueTableSkeleton />}>
         <IssuesTable {...props} />
       </Suspense>
-    </section>
+    </Flex>
   );
 }
 
