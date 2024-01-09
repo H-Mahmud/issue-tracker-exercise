@@ -1,10 +1,8 @@
+import { Issue } from '@prisma/client';
 import { Table } from '@radix-ui/themes';
-import prisma from '@/prisma/client';
 import { IssueStatusBadge, Link } from '../components';
 
-const IssuesTable = async () => {
-  const issues = await prisma.issue.findMany();
-
+const IssuesTable = async ({ issues }: { issues: Issue[] }) => {
   return (
     <Table.Root variant='surface'>
       <Table.Header>
