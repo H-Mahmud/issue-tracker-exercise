@@ -6,6 +6,7 @@ import Pagination from '../components/Pagination';
 import IssueActions from './IssueActions';
 import IssueTableSkeleton from './IssueTableSkeleton';
 import IssuesTable, { columnNames, issueQuery } from './IssuesTable';
+import { Metadata } from 'next';
 
 export type Props = {
   searchParams: issueQuery;
@@ -54,3 +55,8 @@ export default async function IssuePage({ searchParams }: Props) {
 }
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Issue List',
+  description: 'View all project issues',
+};
