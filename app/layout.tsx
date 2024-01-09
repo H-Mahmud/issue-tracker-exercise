@@ -4,7 +4,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import NavBar from './NavBar';
-import { Theme } from '@radix-ui/themes';
+import { Container, Theme } from '@radix-ui/themes';
 import AuthProvider from './auth/Provider';
 import QueryClientProvider from './QueryClientProvider';
 
@@ -30,7 +30,11 @@ export default function RootLayout({
           <AuthProvider>
             <Theme appearance='light' accentColor='violet'>
               <NavBar />
-              <main className='p-5'>{children}</main>
+              <main>
+                <Container>
+                  <div className='p-5'>{children}</div>
+                </Container>
+              </main>
             </Theme>
           </AuthProvider>
         </QueryClientProvider>
