@@ -9,7 +9,7 @@ import IssueTableSkeleton from './IssueTableSkeleton';
 import IssuesTable from './IssuesTable';
 
 export type Props = {
-  searchParams: { status: Status; orderBy: keyof Issue };
+  searchParams: { status: Status; orderBy: keyof Issue; page: string };
 };
 
 export default async function IssuePage(props: Props) {
