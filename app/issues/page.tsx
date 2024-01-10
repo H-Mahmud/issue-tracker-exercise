@@ -29,7 +29,7 @@ export default async function IssuePage({ searchParams }: Props) {
 
   // Issue count & select query
   const page = parseInt(searchParams.page) || 1;
-  const pageSize = 2;
+  const pageSize = 10;
   const issueCount = await prisma.issue.count({ where });
 
   const issues = await prisma.issue.findMany({
